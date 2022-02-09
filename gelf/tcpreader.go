@@ -2,8 +2,8 @@ package gelf
 
 import (
 	"bufio"
-	"encoding/json"
 	"fmt"
+	jsoniter "github.com/json-iterator/go"
 	"net"
 	"time"
 )
@@ -144,7 +144,7 @@ func (r *TCPReader) readMessage() (*Message, error) {
 	b := <-r.messages
 
 	var msg Message
-	if err := json.Unmarshal(b[:len(b)-1], &msg); err != nil {
+	if err := jsoniter.ConfigFastest.Unmarshal(b[:len(b)-1], &msg); err != nil {
 		return nil, fmt.Errorf("json.Unmarshal: %s", err)
 	}
 
