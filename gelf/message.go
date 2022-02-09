@@ -2,8 +2,8 @@ package gelf
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
+	jsoniter "github.com/json-iterator/go"
 	"time"
 )
 
@@ -18,7 +18,7 @@ type Message struct {
 	Level    int32                  `json:"level,omitempty"`
 	Facility string                 `json:"facility,omitempty"`
 	Extra    map[string]interface{} `json:"-"`
-	RawExtra json.RawMessage        `json:"-"`
+	RawExtra jsoniter.RawMessage    `json:"-"`
 }
 
 // Syslog severity levels
@@ -34,7 +34,7 @@ const (
 )
 
 func (m *Message) MarshalJSONBuf(buf *bytes.Buffer) error {
-	b, err := json.Marshal(m)
+	b, err := jsoniter.ConfigFastest.Marshal(m)
 	if err != nil {
 		return err
 	}
@@ -43,7 +43,7 @@ func (m *Message) MarshalJSONBuf(buf *bytes.Buffer) error {
 		return err
 	}
 	if len(m.Extra) > 0 {
-		eb, err := json.Marshal(m.Extra)
+		eb, err := jsoniter.ConfigFastest.Marshal(m.Extra)
 		if err != nil {
 			return err
 		}
@@ -74,7 +74,7 @@ func (m *Message) MarshalJSONBuf(buf *bytes.Buffer) error {
 
 func (m *Message) UnmarshalJSON(data []byte) error {
 	i := make(map[string]interface{}, 16)
-	if err := json.Unmarshal(data, &i); err != nil {
+	if err := jsoniter.ConfigFastest.Unmarshal(data, &i); err != nil {
 		return err
 	}
 	for k, v := range i {

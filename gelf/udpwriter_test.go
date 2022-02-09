@@ -8,8 +8,8 @@ import (
 	"compress/flate"
 	"crypto/rand"
 	"encoding/base64"
-	"encoding/json"
 	"fmt"
+	jsoniter "github.com/json-iterator/go"
 	"io"
 	"io/ioutil"
 	"strings"
@@ -335,7 +335,7 @@ func BenchmarkWriteDisableCompressionAndPreencodeExtra(b *testing.B) {
 			TimeUnix: float64(time.Now().UnixNano()) / float64(time.Second),
 			Level:    6, // info
 			Facility: w.Facility,
-			RawExtra: json.RawMessage(`{"_file":"1234","_line": "3456"}`),
+			RawExtra: jsoniter.RawMessage(`{"_file":"1234","_line": "3456"}`),
 		})
 	}
 }

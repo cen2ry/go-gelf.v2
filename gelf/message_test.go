@@ -1,7 +1,7 @@
 package gelf
 
 import (
-	"encoding/json"
+	jsoniter "github.com/json-iterator/go"
 	"testing"
 )
 
@@ -18,7 +18,7 @@ func TestWrongFieldTypes(t *testing.T) {
 
 	for k, j := range msgData {
 		var msg Message
-		err := json.Unmarshal([]byte(j), &msg)
+		err := jsoniter.ConfigFastest.Unmarshal([]byte(j), &msg)
 		if err == nil {
 			t.Errorf("expected type error on field %s", k)
 		}
