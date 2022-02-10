@@ -8,8 +8,8 @@ import (
 	"bytes"
 	"compress/gzip"
 	"compress/zlib"
-	"encoding/json"
 	"fmt"
+	jsoniter "github.com/json-iterator/go"
 	"io"
 	"net"
 	"strings"
@@ -132,7 +132,7 @@ func (r *Reader) ReadMessage() (*Message, error) {
 	}
 
 	msg := new(Message)
-	if err := json.NewDecoder(cReader).Decode(&msg); err != nil {
+	if err := jsoniter.NewDecoder(cReader).Decode(&msg); err != nil {
 		return nil, fmt.Errorf("json.Unmarshal: %s", err)
 	}
 
